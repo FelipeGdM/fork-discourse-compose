@@ -4,27 +4,34 @@ networks:
     external: true
   back:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.0.${SUBNET}.0/24
 services:
   web:
-    image: indiehosters/discourse-web:${DISCOURSE_VERSION:-2.2.0.beta4}
+    image: libresh/discourse-web:${DISCOURSE_VERSION:-stable}
     volumes:
     - ./data/assets:/home/discourse/discourse/public/assets
     - ./data/uploads:/home/discourse/discourse/public/uploads
     environment:
     - VIRTUAL_HOST
+    - LETSENCRYPT_HOST
+    - VIRTUAL_PORT=80
     networks:
     - back
     - lb_web
     depends_on:
     - app
   app:
-    image: indiehosters/discourse:${DISCOURSE_VERSION:-2.2.0.beta4}
+    image: libresh/discourse::${DISCOURSE_VERSION:-stable}
+    command: bundle exec config/unicorn_launcher -E production -c config/unicorn.conf.rb
     volumes:
     - ./data/assets:/home/discourse/discourse/public/assets
     - ./data/uploads:/home/discourse/discourse/public/uploads
     - ./data/backups:/home/discourse/discourse/public/backups
     environment:
-    - DISCOURSE_HOSTNAME
+    - DISCOURSE_HOSTNAME=$VIRTUAL_HOST
     - POSTGRES_USER=discourse
     - DISCOURSE_SMTP_PORT=587
     - DISCOURSE_SMTP_ADDRESS
@@ -32,6 +39,7 @@ services:
     - DISCOURSE_SMTP_PASSWORD
     - DISCOURSE_DB_PASSWORD
     - DISCOURSE_DB_HOST=postgres
+    - UNICORN_BIND_ALL=true
     depends_on:
     - redis
     - postgres
@@ -43,7 +51,7 @@ services:
     volumes:
     - ./data/assets:/home/discourse/discourse/public/assets
     environment:
-    - DISCOURSE_HOSTNAME
+    - DISCOURSE_HOSTNAME=$VIRTUAL_HOST
     - POSTGRES_USER=discourse
     - DISCOURSE_SMTP_PORT=587
     - DISCOURSE_SMTP_ADDRESS
