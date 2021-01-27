@@ -64,7 +64,7 @@ services:
     networks:
     - back
   postgres:
-    image: postgres:${POSTGRES_VERSION:-10.6}
+    image: postgres:${POSTGRES_VERSION:-12-alpine}
     volumes:
     - ./data/postgres:/var/lib/postgresql/data
     networks:
