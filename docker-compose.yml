@@ -46,7 +46,7 @@ services:
     networks:
     - back
   sidekiq:
-    image: libresh/discourse::${DISCOURSE_VERSION:-stable}
+    image: libresh/discourse:${DISCOURSE_VERSION:-stable}
     command: bundle exec sidekiq -q critical -q default -q low -v
     volumes:
     - ./data/assets:/home/discourse/discourse/public/assets
