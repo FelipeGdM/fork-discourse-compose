@@ -11,9 +11,11 @@ echo "SUBNET=${SUBNET:-0}" >> .env
 
 mkdir -p ./data/{assets,uploads,backups,redis,postgres}
 
-chown -R 1000:1000 ./data/
+chown -R 1000:1000 ./data/assets
+chown -R 1000:1000 ./data/uploads
+chown -R 1000:1000 ./data/backups
 
-VIRTUAL_HOST=${URL} docker-compose run app bash -c "sleep 60 && bundle exec rake maxminddb:get db:migrate assets:precompile"
+VIRTUAL_HOST=${URL} docker-compose run app bash -c "sleep 60 && bundle exec rake db:migrate assets:precompile"
 VIRTUAL_HOST=${URL} docker-compose run app bash -c "bundle exec rake admin:create"
 
 echo "!!!Configure notification email in discourse settings!!!!!!"
