@@ -24,7 +24,7 @@ services:
     depends_on:
     - app
   app:
-    image: libresh/discourse::${DISCOURSE_VERSION:-stable}
+    image: libresh/discourse:${DISCOURSE_VERSION:-stable}
     command: bundle exec config/unicorn_launcher -E production -c config/unicorn.conf.rb
     volumes:
     - ./data/assets:/home/discourse/discourse/public/assets
