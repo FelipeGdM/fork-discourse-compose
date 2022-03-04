@@ -1,4 +1,7 @@
 # discourse
+
+Github fork from https://lab.libreho.st/libre.sh/compose/discourse
+
 Discourse application for IndieHosters network
 
 # How to use this image
