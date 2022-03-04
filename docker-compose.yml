@@ -34,6 +34,7 @@ services:
       - ./data/uploads:/home/discourse/discourse/public/uploads
       - ./data/backups:/home/discourse/discourse/public/backups
     environment:
+      - REDIS_HOST=redis
       - DISCOURSE_HOSTNAME=$VIRTUAL_HOST
       - POSTGRES_USER=discourse
       - DISCOURSE_SMTP_PORT=587
@@ -54,6 +55,7 @@ services:
     volumes:
       - ./data/assets:/home/discourse/discourse/public/assets
     environment:
+      - REDIS_HOST=redis
       - DISCOURSE_HOSTNAME=$VIRTUAL_HOST
       - POSTGRES_USER=discourse
       - DISCOURSE_SMTP_PORT=587
